@@ -89,13 +89,20 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=False,
         null=False
     )
+
+    password = models.CharField(
+        max_length=150,
+        unique=True,
+        blank=False,
+        null=False
+    )
     is_active = models.BooleanField(default=True)
     staff = models.BooleanField(default=False)
     superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = [
-        'email',
+        'email', 'password',
     ]
 
     objects = UserManager()

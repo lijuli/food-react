@@ -11,16 +11,19 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+# from pathlib import Path
 from datetime import timedelta
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
+
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', 'DEFAULT')
 
 DEBUG = True
@@ -31,20 +34,21 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 # Application definition
 
 INSTALLED_APPS = [
+    'users',
+    'recipes',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
     'djoser',
     'corsheaders',
-    # 'rest_framework_simplejwt',
-    # 'rest_framework_simplejwt.token_blacklist',
-    'users',
 ]
 
 MIDDLEWARE = [
@@ -57,7 +61,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
     {
@@ -75,7 +79,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 # Database
@@ -141,33 +145,24 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
 }
 
 # DJOSER CONFIG
 DJOSER = {
-    "LOGIN_FIELD": "email",
-    # "USER_CREATE_PASSWORD_RETYPE": True,
-    # "USERNAME_CHANGED_EMAIL_CONFIRMATION": True,
-    # "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
-    # "SEND_CONFIRMATION_EMAIL": True,
-    # "SET_USERNAME_RETYPE": True,
-    # "SET_PASSWORD_RETYPE": True,
-    # "USERNAME_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
-    # "PASSWORD_RESET_CONFIRM_URL": "email/reset/confirm/{uid}/{token}",
-    # "ACTIVATION_URL": "activate/{uid}/{token}",
-    # "SEND_ACTIVATION_EMAIL": True,
-    # "SOCIAL_AUTH_TOKEN_STRATEGY": "djoser.social.token.jwt.TokenStrategy",
-    # "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
-    #     "your redirect url",
-    #     "your redirect url",
-    # ],
-    # "SERIALIZERS": {
-    #     "user_create": "accounts.serializers.UserCreateSerializer",  # custom serializer
-    #     "user": "djoser.serializers.UserSerializer",
-    #     "current_user": "djoser.serializers.UserSerializer",
-    #     "user_delete": "djoser.serializers.UserSerializer",
-    # },
+    'LOGIN_FIELD': 'email',
+    'SERIALIZERS': {
+        # 'user_create': 'users.serializers.CustomUserCreateSerializer',
+        # 'user': 'users.serializers.CustomUserSerializer',
+        # 'current_user': 'users.serializers.CustomUserSerializer'
+        
+        'user_create': 'users.serializers.user_create_serializer.CustomUserCreateSerializer',
+        'user': 'users.serializers.user_serializer.CustomUserSerializer',
+        'current_user': 'users.serializers.user_serializer.CustomUserSerializer',
+        },
+    'HIDE_USERS': False,
 }
 
 # CORS HEADERS

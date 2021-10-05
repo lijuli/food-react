@@ -1,3 +1,13 @@
-from django.shortcuts import render
+from rest_framework.pagination import PageNumberPagination
+from users.models import User
+from users.serializers.user_serializer import CustomUserSerializer
+from djoser.views import UserViewSet
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
-# Create your views here.
+
+class CustomUserViewSet(UserViewSet):
+    serializer_class = CustomUserSerializer
+    queryset = User.objects.all()
+    pagination_class = PageNumberPagination
+
