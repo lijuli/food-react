@@ -49,10 +49,8 @@ class CustomUserViewSet(UserViewSet):
         )
 
         if request.method == 'GET':
-
             if Subscription.objects.filter(subscribed=current_user, user=user).exists():
                 return Response(status=status.HTTP_204_NO_CONTENT)
-
             serializer = SubscribeSerializer(
                 many=False,
                 instance=user,
