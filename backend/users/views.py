@@ -42,7 +42,7 @@ class CustomUserViewSet(UserViewSet):
         url_path='subscribe'
     )
     def subscribe(self, request, id=None):
-        current_user = self.request.user
+        current_user = request.user
         user = get_object_or_404(
             User,
             id=id
@@ -50,7 +50,7 @@ class CustomUserViewSet(UserViewSet):
 
         if request.method == 'GET':
 
-            if Subscription.objects.filter(subscribed_id=current_user.id).exists():
+            if Subscription.objects.filter(subscribed=current_user, user=user).exists():
                 return Response(status=status.HTTP_204_NO_CONTENT)
 
             serializer = SubscribeSerializer(
