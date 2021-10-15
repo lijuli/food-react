@@ -136,29 +136,26 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-    # @property
-    # def token(self):
-    #     """
-    #     Allows us to get a user's token by calling `user.token` instead of
-    #     `user.generate_jwt_token().
-    #     The `@property` decorator above makes this possible. `token` is called
-    #     a "dynamic property".
-    #     """
-    #     return self._generate_jwt_token()
-    #
-    # def _generate_jwt_token(self):
-    #     """
-    #     Generates a JSON Web Token that stores this user's ID and has an expiry
-    #     date set to 60 days into the future.
-    #     """
-    #     dt = datetime.now() + timedelta(days=60)
-    #
-    #     token = jwt.encode(
-    #         {"id": self.pk, "exp": int(dt.strftime("%s"))},
-    #         settings.SECRET_KEY,
-    #         algorithm="HS256",
-    #     )
-    #
-    #     return token.decode("utf-8")
 
-        # https://github.com/gothinkster/django-realworld-example-app/blob/master/conduit/apps/authentication/models.py
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='target_user',
+        verbose_name='user'
+    )
+    subscribed = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='subscribed',
+        verbose_name='subscribed'
+    )
+
+    class Meta:
+        verbose_name = 'subscriptions'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'subscribed'],
+                name='unique subscription'
+            )
+        ]

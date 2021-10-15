@@ -34,16 +34,14 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 # Application definition
 
 INSTALLED_APPS = [
-    'users',
-    'recipes',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'users',
+    'recipes',
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
@@ -88,7 +86,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres_fg',  # os.getenv('DB_NAME'),
+        'NAME': 'foodgram_db',  # os.getenv('DB_NAME'),
         'USER': 'postgres',  # os.getenv('POSTGRES_USER'),
         'PASSWORD': 'postgres',  # os.getenv('POSTGRES_PASSWORD'),
         'HOST': 'localhost',  # os.getenv('DB_HOST'),
@@ -158,9 +156,9 @@ DJOSER = {
         # 'user': 'users.serializers.CustomUserSerializer',
         # 'current_user': 'users.serializers.CustomUserSerializer'
         
-        'user_create': 'users.serializers.user_create_serializer.CustomUserCreateSerializer',
-        'user': 'users.serializers.user_serializer.CustomUserSerializer',
-        'current_user': 'users.serializers.user_serializer.CustomUserSerializer',
+        'user_create': 'users.serializers.user_create.CustomUserCreateSerializer',
+        'user': 'users.serializers.user.CustomUserSerializer',
+        'current_user': 'users.serializers.user.CustomUserSerializer',
         },
     'HIDE_USERS': False,
 }
