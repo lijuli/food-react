@@ -29,7 +29,7 @@ class Recipe(models.Model):
         help_text='select a tag'
     )
     image = models.ImageField(
-        upload_to='recipes/',
+        # upload_to='recipes/',
         max_length=None,
         # allow_empty_file=False
     )
@@ -56,25 +56,6 @@ class Recipe(models.Model):
         auto_now_add=True,
         db_index=True
     )
-    # is_favorited = models.BooleanField(default=False)
-    # is_in_shopping_cart = models.BooleanField(default=False)
-
-    # @property
-    # def is_in_shopping_cart(self):
-    #     try:
-    #         return Cart.objects.exists(recipe=self)
-    #     except Cart.DoesNotExist:
-    #         return False
-    #
-    # @property
-    # def is_favorited(self):
-    #     try:
-    #         return Favourite.objects.exists(recipe=self)
-    #     except Favourite.DoesNotExist:
-    #         return False
-    #
-    # class Meta:
-    #     ordering = ('-pk',)
 
     def __str__(self):
         return self.name

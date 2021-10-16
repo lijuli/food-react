@@ -20,5 +20,6 @@ from django.urls.conf import include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
+    path('api/', include('recipes.urls')),
     # path(r'^auth/', include('djoser.urls.authtoken'))
 ]
