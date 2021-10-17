@@ -1,5 +1,8 @@
+import json
+
 from django.shortcuts import get_object_or_404
-from django.db.models import Sum
+from django.core import serializers
+from django.http import HttpResponse, JsonResponse
 
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin
@@ -10,7 +13,7 @@ from rest_framework import status
 
 from users.models import User
 from recipes.models import Cart
-from recipes.models.recipe import Recipe
+from recipes.models.recipe import Recipe, RecipeIngredient
 from recipes.models.tag import Tag
 from recipes.models.ingredient import Ingredient
 from recipes.models.favourite import Favourite
@@ -52,25 +55,6 @@ class IngredientViewSet(ModelViewSet):
         return Response(data)
 
 
-# class FavouriteViewSet(ModelViewSet):
-#     queryset = Favourite.objects.all()
-#     serializer_class = FavouriteSerializer
-#     # pagination_class = PageNumberPagination
-#     # permission_classes = (IsAdminOrReadOnly,)
-#     # filter_backends = (filters.SearchFilter,)
-#     # search_fields = ('name',)
-#     # lookup_field = 'slug'
-#
-#     # def get_paginated_response(self, data):
-#     #     return Response(data)
-#
-#     # def get_queryset(self):
-#     #     return Favourite.objects.filter(recipe=self.kwargs['recipe_id'])
-#     #
-#     # def perform_create(self, serializer):
-#     #     recipe = get_object_or_404(Recipe, id=self.kwargs['recipe_id'])
-#     #     serializer.save(author=self.request.user, recipe=recipe)
-
 
 class RecipeViewSet(ModelViewSet):
     queryset = Recipe.objects.all()
@@ -83,20 +67,19 @@ class RecipeViewSet(ModelViewSet):
             return RecipeListSerializer
         return RecipeWriteSerializer
 
-    # @action(
-    #     detail=True,
-    #     methods=['get'],
-    #     url_path='download_shopping_cart'
-    # )
-    # def download_shopping_cart(self, request, *args, **kwargs):
-    #     # current_user = self.request.user
-    #     result_ingr = Recipe.objects.all()
-    #
-    #     serializer = RecipeListSerializer(
-    #         instance=result_ingr,
-    #         many=True
-    #     )
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
+    @action(
+        detail=False,
+        methods=['get'],
+        url_path='download_shopping_cart'
+    )
+    def download_shopping_cart(self, request, *args, **kwargs):
+        current_user = request.user
+        recipes_ids = Cart.objects.filter(user=current_user).values_list('recipes_id', flat=True)
+        tmp_ingredients = list(RecipeIngredient.objects.filter(recipes_id__in=recipes_ids).values_list('ingredients__name', 'ingredients__measurement_unit', 'amount'))
+
+        data = json.dumps(tmp_ingredients)
+        return HttpResponse(data, content_type="application/json")
+
 
     @action(
         detail=True,
