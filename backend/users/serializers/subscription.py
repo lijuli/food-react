@@ -1,10 +1,8 @@
-from djoser.serializers import UserSerializer
-from django.forms.models import model_to_dict
+from recipes.models import Recipe
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
-from users.models import Subscription
-from recipes.models import Recipe
-from users.models import User, Subscription
+
+from users.models import Subscription, User
 from users.serializers.user import CustomUserSerializer
 
 
@@ -33,31 +31,37 @@ class SubscribeSerializer(CustomUserSerializer):
         user = self.context.get('request').user
         subscribed = data.get('subscribed')
         if user == subscribed:
-            raise serializers.ValidationError("Users can't subscribe to themselves.")
+            raise serializers.ValidationError(
+                "Users can't subscribe to themselves."
+            )
         return data
 
     def get_recipes_count(self, obj):
-        # user = self.context.get('request').user
         return Recipe.objects.filter(author=obj).count()
 
     def get_recipes(self, obj):
-        # user = self.context.get('request').user
-        serializer = RecipeSubscriptionSerializer(
-            Recipe.objects.filter(author=obj),
-            many=True
-        )
+        if 'recipes_limit' in self.context.get('request').query_params:
+            recipes_limit = int(self.context.get(
+                'request'
+            ).query_params['recipes_limit'])
+            serializer = RecipeSubscriptionSerializer(
+                Recipe.objects.filter(author=obj)[:recipes_limit],
+                many=True
+            )
+        else:
+            serializer = RecipeSubscriptionSerializer(
+                Recipe.objects.filter(author=obj),
+                many=True
+            )
         return serializer.data
-
-    # def to_representation(self, instance):
-    #     return model_to_dict(instance)
 
 
 class RecipeSubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
+        model = Recipe
         fields = (
             'id',
             'name',
             'image',
             'cooking_time',
         )
-        model = Recipe

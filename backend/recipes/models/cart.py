@@ -1,7 +1,6 @@
 from django.db import models
-
-from users.models import User
 from recipes.models.recipe import Recipe
+from users.models import User
 
 
 class Cart(models.Model):
@@ -15,9 +14,8 @@ class Cart(models.Model):
         related_name='cart_recipe',
         verbose_name='recipe',
         help_text='select a recipe',
-        on_delete = models.CASCADE,
+        on_delete=models.CASCADE,
     )
 
     class Meta:
         ordering = ('-pk',)
-

@@ -1,19 +1,6 @@
+from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
+                                        PermissionsMixin)
 from django.db import models
-from django.core.validators import RegexValidator
-from django.contrib.auth.models import AbstractBaseUser
-from django.contrib.auth.models import BaseUserManager
-from django.contrib.auth.models import PermissionsMixin
-import jwt
-
-from datetime import datetime, timedelta
-
-from django.conf import settings
-
-from django.db import models
-USERNAME_VALIDATOR = RegexValidator(
-    r'^[\w.@+-]+\z',
-    'Only valid username is allowed'
-)
 
 
 class UserManager(BaseUserManager):

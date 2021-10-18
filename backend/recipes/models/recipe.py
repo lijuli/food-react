@@ -1,5 +1,5 @@
-from django.db import models
 from django.core.validators import MinValueValidator
+from django.db import models
 
 from recipes.models.ingredient import Ingredient
 from recipes.models.tag import Tag
@@ -77,3 +77,5 @@ class RecipeIngredient(models.Model):
         null=False
     )
 
+    def __str__(self):
+        return f'{self.ingredients.name} - {self.amount}'

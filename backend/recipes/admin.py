@@ -7,7 +7,6 @@ from recipes.models import Favourite
 from recipes.models import Cart
 
 
-
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ('name', 'cooking_time')
