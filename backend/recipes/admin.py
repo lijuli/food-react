@@ -10,6 +10,7 @@ from recipes.models.tag import Tag
 class IngredientInline(admin.TabularInline):
     model = RecipeIngredient
 
+
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     inlines = [IngredientInline]
@@ -18,7 +19,14 @@ class RecipeAdmin(admin.ModelAdmin):
         return obj.fav_recipe.count()
     recipe_favorited_count.short_description = 'Favorited count'
 
-    fields = ('author', 'name', 'text', 'tags', 'cooking_time', 'recipe_favorited_count')
+    fields = (
+        'author',
+        'name',
+        'text',
+        'tags',
+        'cooking_time',
+        'recipe_favorited_count'
+    )
     list_display = ('name', 'author')
     search_fields = ('name', 'ingredients',)
     list_filter = ('author', 'name', 'tags')

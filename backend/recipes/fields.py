@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+
 class Base64ImageField(serializers.ImageField):
     """
     A Django REST framework field for handling image-uploads.
@@ -39,4 +40,3 @@ class Base64ImageField(serializers.ImageField):
         extension = "jpg" if extension == "jpeg" else extension
 
         return extension
-

@@ -22,4 +22,3 @@ class Cart(models.Model):
         ordering = ('-pk',)
         verbose_name = 'Shopping cart'
         verbose_name_plural = 'Shopping carts'
-

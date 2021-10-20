@@ -21,4 +21,3 @@ class Favourite(models.Model):
         ordering = ('-pk',)
         verbose_name = 'Favourite recipe'
         verbose_name_plural = 'Favourite recipes'
-
