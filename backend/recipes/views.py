@@ -9,11 +9,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from recipes.filters import IngredientsFilter, RecipesFilter
-from recipes.models import Cart
-from recipes.models.favourite import Favourite
-from recipes.models.ingredient import Ingredient
-from recipes.models.recipe import Recipe, RecipeIngredient
-from recipes.models.tag import Tag
+from recipes.models import (Cart, Favourite, Ingredient, Recipe,
+                            RecipeIngredient, Tag)
 from recipes.permissions import IsAdmin
 from recipes.serializers import (CartSerializer, FavouriteSerializer,
                                  IngredientSerializer, RecipeListSerializer,

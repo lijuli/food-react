@@ -18,20 +18,17 @@ class Recipe(models.Model):
         related_name='ingredients',
         verbose_name='ingredients',
         through='RecipeIngredient',
-        blank=False,
         help_text='select an ingredient'
     )
     tags = models.ManyToManyField(
         Tag,
-        blank=False,
         related_name='tags',
         verbose_name='tag',
         help_text='select a tag'
     )
     image = models.ImageField(
-        # upload_to='recipes/',
+        upload_to='recipes/',
         max_length=None,
-        # allow_empty_file=False
     )
     name = models.CharField(
         'recipe name',
@@ -41,21 +38,26 @@ class Recipe(models.Model):
     text = models.TextField(
         'recipe text',
         blank=True,
-        null=True,
         help_text='enter recipe here'
     )
     cooking_time = models.PositiveSmallIntegerField(
         'cooking time',
-        validators=[MinValueValidator(
+        help_text='(in minutes)',
+        validators=(MinValueValidator(
             limit_value=1,
             message='You can not save time while cooking.'
-        )]
+        ),)
     )
     pub_date = models.DateTimeField(
         verbose_name='published',
         auto_now_add=True,
         db_index=True
     )
+
+    class Meta:
+        ordering = ('-pk',)
+        verbose_name = 'Recipe'
+        verbose_name_plural = 'Recipes'
 
     def __str__(self):
         return self.name
@@ -73,9 +75,17 @@ class RecipeIngredient(models.Model):
         on_delete=models.CASCADE,
     )
     amount = models.FloatField(
-        validators=[MinValueValidator(limit_value=0.1)],
+        validators=(MinValueValidator(
+            limit_value=0.1,
+            message='Ingrediant amount cannot be zero or negative.'
+        ),),
         null=False
     )
+
+    class Meta:
+        ordering = ('-pk',)
+        verbose_name = 'Ingredient for Recipe'
+        verbose_name_plural = 'Ingredients for Recipe'
 
     def __str__(self):
         return f'{self.ingredients.name} - {self.amount}'

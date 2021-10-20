@@ -56,41 +56,32 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True,
         blank=False,
         null=False,
-        # validators=(USERNAME_VALIDATOR,)
     )
     email = models.EmailField(
         db_index=True,
         unique=True,
-        blank=False,
-        null=False
     )
     first_name = models.CharField(
         max_length=150,
         unique=False,
-        blank=False,
-        null=False
     )
     last_name = models.CharField(
         max_length=150,
         unique=False,
-        blank=False,
-        null=False
     )
 
     password = models.CharField(
         max_length=150,
         unique=True,
-        blank=False,
-        null=False
     )
     is_active = models.BooleanField(default=True)
     staff = models.BooleanField(default=False)
     superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = [
+    REQUIRED_FIELDS = (
         'email', 'password',
-    ]
+    )
 
     objects = UserManager()
 
@@ -120,6 +111,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     def is_superuser(self):
         return self.superuser
 
+    class Meta:
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
+
     def __str__(self):
         return self.email
 
@@ -139,10 +134,11 @@ class Subscription(models.Model):
     )
 
     class Meta:
-        verbose_name = 'subscriptions'
-        constraints = [
+        verbose_name = 'Subscription'
+        verbose_name_plural = 'Subscriptions'
+        constraints = (
             models.UniqueConstraint(
-                fields=['user', 'subscribed'],
+                fields=('user', 'subscribed'),
                 name='unique subscription'
-            )
-        ]
+            ),
+        )

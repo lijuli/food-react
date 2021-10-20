@@ -1,5 +1,6 @@
 from django.db import models
-from recipes.models.recipe import Recipe
+
+from recipes.models import Recipe
 from users.models import User
 
 
@@ -15,3 +16,9 @@ class Favourite(models.Model):
         related_name='fav_recipe',
         on_delete=models.CASCADE,
     )
+
+    class Meta:
+        ordering = ('-pk',)
+        verbose_name = 'Favourite recipe'
+        verbose_name_plural = 'Favourite recipes'
+

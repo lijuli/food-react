@@ -19,7 +19,7 @@ class CustomUserSerializer(UserSerializer):
         model = User
 
     def get_is_subscribed(self, obj):
-        user = self.context['request'].user
+        user = self.context.get('request').user
         if user.is_authenticated:
             return Subscription.objects.filter(
                 user=obj,

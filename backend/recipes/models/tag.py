@@ -19,6 +19,8 @@ class Tag(models.Model):
 
     class Meta:
         ordering = ('-pk',)
+        verbose_name = 'Tag'
+        verbose_name_plural = 'Tags'
 
     def __str__(self):
         return self.name

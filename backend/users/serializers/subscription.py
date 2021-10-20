@@ -20,12 +20,12 @@ class SubscribeSerializer(CustomUserSerializer):
                   'recipes',
                   'recipes_count',)
         model = User
-        validators = [
+        validators = (
             UniqueTogetherValidator(
                 queryset=Subscription.objects.all(),
-                fields=['user', 'subscribed']
-            )
-        ]
+                fields=('user', 'subscribed')
+            ),
+        )
 
     def validate(self, data):
         user = self.context.get('request').user
@@ -43,7 +43,7 @@ class SubscribeSerializer(CustomUserSerializer):
         if 'recipes_limit' in self.context.get('request').query_params:
             recipes_limit = int(self.context.get(
                 'request'
-            ).query_params['recipes_limit'])
+            ).query_params.get('recipes_limit'))
             serializer = RecipeSubscriptionSerializer(
                 Recipe.objects.filter(author=obj)[:recipes_limit],
                 many=True

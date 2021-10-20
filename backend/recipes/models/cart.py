@@ -1,4 +1,5 @@
 from django.db import models
+
 from recipes.models.recipe import Recipe
 from users.models import User
 
@@ -19,3 +20,6 @@ class Cart(models.Model):
 
     class Meta:
         ordering = ('-pk',)
+        verbose_name = 'Shopping cart'
+        verbose_name_plural = 'Shopping carts'
+

@@ -1,54 +1,12 @@
 from rest_framework import serializers
-from rest_framework.generics import get_object_or_404
 from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
 
-from recipes.models.recipe import Recipe, RecipeIngredient
-from recipes.models.tag import Tag
-from recipes.models.ingredient import Ingredient
-from recipes.models.favourite import Favourite
-from recipes.models import Cart
-from users.serializers.user import CustomUserSerializer
+from recipes.fields import Base64ImageField
 from users.serializers.subscription import RecipeSubscriptionSerializer
-
-
-class Base64ImageField(serializers.ImageField):
-    """
-    A Django REST framework field for handling image-uploads.
-    It uses base64 for encoding and decoding the contents of the file.
-
-    Heavily based on
-    https://github.com/tomchristie/django-rest-framework/pull/1268
-    And copy pasted from stackoverflow.
-
-    Updated for Django REST framework 3.
-    """
-    def to_internal_value(self, data):
-        from django.core.files.base import ContentFile
-        import base64
-        import six
-        import uuid
-
-        if isinstance(data, six.string_types):
-            if 'data:' in data and ';base64,' in data:
-                header, data = data.split(';base64,')
-            try:
-                decoded_file = base64.b64decode(data)
-            except TypeError:
-                self.fail('invalid_image')
-
-            file_name = str(uuid.uuid4())[:12]
-            file_extension = self.get_file_extension(file_name, decoded_file)
-            complete_file_name = "%s.%s" % (file_name, file_extension, )
-            data = ContentFile(decoded_file, name=complete_file_name)
-        return super(Base64ImageField, self).to_internal_value(data)
-
-    def get_file_extension(self, file_name, decoded_file):
-        import imghdr
-
-        extension = imghdr.what(file_name, decoded_file)
-        extension = "jpg" if extension == "jpeg" else extension
-
-        return extension
+from users.serializers.user import CustomUserSerializer
+from recipes.models import (Cart, Favourite, Ingredient, Recipe,
+                            RecipeIngredient, Tag)
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -169,11 +127,11 @@ class RecipeListSerializer(serializers.ModelSerializer):
 
     def get_is_in_shopping_cart(self, obj):
         try:
-            if self.context['request'].user.is_anonymous:
+            if self.context.get('request').user.is_anonymous:
                 return False
             return Cart.objects.filter(
                 recipes=obj,
-                user=self.context['request'].user
+                user=self.context.get('request').user
             ).exists()
         except Cart.DoesNotExist:
             return False
@@ -185,7 +143,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
     cooking_time = serializers.IntegerField()
 
     def create(self, validated_data):
-        author = self.context['request'].user
+        author = self.context.get('request').user
         ingredients_data = validated_data.pop('ingredients')
         tags_data = validated_data.pop('tags')
 
@@ -198,9 +156,9 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
             RecipeIngredient.objects.create(
                 recipes=recipe,
                 ingredients=Ingredient.objects.get(
-                    id=ingredient_dictionary['id']
+                    id=ingredient_dictionary.get('id')
                 ),
-                amount=ingredient['amount']
+                amount=ingredient.get('amount')
             )
         return recipe
 
@@ -216,9 +174,9 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
             RecipeIngredient.objects.create(
                 recipes=instance,
                 ingredients=Ingredient.objects.get(
-                    id=ingredient_dictionary['id']
+                    id=ingredient_dictionary.get('id')
                 ),
-                amount=ingredient['amount']
+                amount=ingredient.get('amount')
             )
         instance.tags.set(tags_data)
         instance.save()
