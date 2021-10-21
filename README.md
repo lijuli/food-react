@@ -25,9 +25,19 @@ Now you are all set and can run the project!\
 * Djoser
 
 ### API:
-API documentation: \
+API documentation locally: \
 `cd /infra`\
 `docker-compose up`\
 and go to http://localhost/api/docs/
 
-For now that's it. I will keep updating this doc as I manage to publish the project on remote server. 
+
+OR use following:
+
+
+### API:
+API documentation: \
+http://ec2-18-118-112-1.us-east-2.compute.amazonaws.com/api/docs/
+
+Admin: \
+http://ec2-18-118-112-1.us-east-2.compute.amazonaws.com/admin/
+ 
