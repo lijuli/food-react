@@ -5,15 +5,15 @@ on:
     branches:
       - master
 
-env:
-  AWS_REGION: MY_AWS_REGION                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: MY_ECR_REPOSITORY           # set this to your Amazon ECR repository name
-  ECS_SERVICE: MY_ECS_SERVICE                 # set this to your Amazon ECS service name
-  ECS_CLUSTER: MY_ECS_CLUSTER                 # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION # set this to the path to your Amazon ECS task definition
-                                               # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: MY_CONTAINER_NAME           # set this to the name of the container in the
-                                               # containerDefinitions section of your task definition
+# env:
+#   AWS_REGION: MY_AWS_REGION                   # set this to your preferred AWS region, e.g. us-west-1
+#   ECR_REPOSITORY: MY_ECR_REPOSITORY           # set this to your Amazon ECR repository name
+#   ECS_SERVICE: MY_ECS_SERVICE                 # set this to your Amazon ECS service name
+#   ECS_CLUSTER: MY_ECS_CLUSTER                 # set this to your Amazon ECS cluster name
+#   ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION # set this to the path to your Amazon ECS task definition
+#                                                # file, e.g. .aws/task-definition.json
+#   CONTAINER_NAME: MY_CONTAINER_NAME           # set this to the name of the container in the
+#                                                # containerDefinitions section of your task definition
 
 jobs:
   tests:
@@ -31,7 +31,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pep8-naming flake8-broken-line flake8-return flake8-isort
         pip install --upgrade flake8
-        pip install -r requirements.txt
+        pip install -r backend/requirements.txt
     - name: Test with flake8 and django tests
       run: |
         python -m flake8
@@ -53,7 +53,7 @@ jobs:
           uses: docker/build-push-action@v2
           with:
             push: true
-            tags: ${{ secrets.DOCKER_USERNAME }}/yamdb_final:latest
+            tags: ${{ secrets.DOCKER_USERNAME }}/foodgram:latest
 
 #  deploy:
 #    name: Deploy
