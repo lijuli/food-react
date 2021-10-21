@@ -11,7 +11,7 @@ from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from recipes.filters import IngredientsFilter, RecipesFilter
 from recipes.models import (Cart, Favourite, Ingredient, Recipe,
                             RecipeIngredient, Tag)
-from recipes.permissions import IsAdmin
+from recipes.permissions import IsAuthorOrAdmin
 from recipes.serializers import (CartSerializer, FavouriteSerializer,
                                  IngredientSerializer, RecipeListSerializer,
                                  RecipeWriteSerializer, TagSerializer)
@@ -60,7 +60,7 @@ class RecipeViewSet(ModelViewSet):
 
     def get_permissions(self):
         if self.action in ('create', 'partial_update', 'update', 'destroy'):
-            self.permission_classes = [IsAuthenticated, IsAdmin]
+            self.permission_classes = [IsAuthorOrAdmin]
         if self.action in ('list', 'retrieve'):
             self.permission_classes = [AllowAny]
         elif self.action in (

@@ -11,6 +11,7 @@ class SubscribeSerializer(CustomUserSerializer):
     recipes_count = serializers.SerializerMethodField('get_recipes_count')
 
     class Meta:
+        model = User
         fields = ('email',
                   'id',
                   'username',
@@ -19,22 +20,6 @@ class SubscribeSerializer(CustomUserSerializer):
                   'is_subscribed',
                   'recipes',
                   'recipes_count',)
-        model = User
-        validators = (
-            UniqueTogetherValidator(
-                queryset=Subscription.objects.all(),
-                fields=('user', 'subscribed')
-            ),
-        )
-
-    def validate(self, data):
-        user = self.context.get('request').user
-        subscribed = data.get('subscribed')
-        if user == subscribed:
-            raise serializers.ValidationError(
-                "Users can't subscribe to themselves."
-            )
-        return data
 
     def get_recipes_count(self, obj):
         return Recipe.objects.filter(author=obj).count()
@@ -65,3 +50,31 @@ class RecipeSubscriptionSerializer(serializers.ModelSerializer):
             'image',
             'cooking_time',
         )
+
+class SubscriptionsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Subscription
+        fields = '__all__'
+        validators = (
+            UniqueTogetherValidator(
+                queryset=Subscription.objects.all(),
+                fields=('user', 'subscribed')
+            ),
+        )
+
+        def validate(self, data):
+            user = self.context.get('request').user
+            subscribed = data.get('subscribed')
+            if user == subscribed:
+                raise serializers.ValidationError(
+                    "Users can't subscribe to themselves."
+                )
+            return data
+
+    def to_representation(self, instance):
+        serializer = SubscribeSerializer(
+            instance.user,
+            context=self.context
+        )
+        return serializer.data

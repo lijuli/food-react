@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from recipes.permissions import IsAuthorOrAdmin
 from recipes.views import DefaultResultsSetPagination
 from users.models import Subscription, User
-from users.serializers.subscription import SubscribeSerializer
+from users.serializers.subscription import SubscribeSerializer, SubscriptionsSerializer
 
 
 class CustomUserViewSet(UserViewSet):
@@ -47,18 +47,22 @@ class CustomUserViewSet(UserViewSet):
             User,
             id=id
         )
-        serializer = SubscribeSerializer(
-            many=False,
-            instance=user,
-            context={'request': request}
-        )
         if request.method == 'GET':
             if Subscription.objects.filter(
                     subscribed=current_user, user=user
             ).exists():
                 return Response(status=status.HTTP_204_NO_CONTENT)
-            Subscription.objects.create(user_id=id, subscribed=current_user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            serializer = SubscriptionsSerializer(
+                data={
+                    'user': user.id,
+                    'subscribed': current_user.id
+                },
+                context={'request': request}
+            )
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         Subscription.objects.filter(
             subscribed_id=current_user.id,
