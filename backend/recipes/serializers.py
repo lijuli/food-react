@@ -3,10 +3,10 @@ from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 
 from recipes.fields import Base64ImageField
-from users.serializers.subscription import RecipeSubscriptionSerializer
-from users.serializers.user import CustomUserSerializer
 from recipes.models import (Cart, Favourite, Ingredient, Recipe,
                             RecipeIngredient, Tag)
+from users.serializers.subscription import RecipeSubscriptionSerializer
+from users.serializers.user import CustomUserSerializer
 
 
 class TagSerializer(serializers.ModelSerializer):
