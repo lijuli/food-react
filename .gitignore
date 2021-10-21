@@ -110,6 +110,8 @@ ENV/
 env.bak/
 venv.bak/
 
+madia/*
+static/*
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -133,3 +135,6 @@ dmypy.json
 
 # binary
 .png
+.png
+.jpeg
+.jpg
