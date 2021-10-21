@@ -40,4 +40,8 @@ http://ec2-18-118-112-1.us-east-2.compute.amazonaws.com/api/docs/
 
 Admin: \
 http://ec2-18-118-112-1.us-east-2.compute.amazonaws.com/admin/
+
+Test account:
+test@ju.com
+testAcc15
  
