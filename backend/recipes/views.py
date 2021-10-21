@@ -17,6 +17,7 @@ from recipes.serializers import (CartSerializer, FavouriteSerializer,
                                  RecipeWriteSerializer, TagSerializer)
 from users.serializers.subscription import RecipeSubscriptionSerializer
 
+
 class DefaultResultsSetPagination(PageNumberPagination):
     """A Custom pagination class."""
     page_size = 10
@@ -125,14 +126,14 @@ class RecipeViewSet(ModelViewSet):
             )
             if serializer.is_valid():
                 serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(
+                    serializer.data, status=status.HTTP_201_CREATED
+                )
             return Response(
                 serializer.errors, status=status.HTTP_400_BAD_REQUEST
             )
-
         Favourite.objects.filter(user=current_user, recipe=recipe).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
 
     @action(
         detail=True,

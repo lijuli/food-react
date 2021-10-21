@@ -28,15 +28,12 @@ class CustomUserViewSet(UserViewSet):
         paginator = DefaultResultsSetPagination()
         users = User.objects.filter(subscribed__user=self.request.user)
         result_page = paginator.paginate_queryset(users, request)
-        page = self.paginate_queryset(users)
         serializer = SubscribeSerializer(
-            # page,
             result_page,
             many=True,
             context={'request': request}
         )
         return paginator.get_paginated_response(serializer.data)
-
 
     @action(
         detail=True,
@@ -62,7 +59,6 @@ class CustomUserViewSet(UserViewSet):
                 return Response(status=status.HTTP_204_NO_CONTENT)
             Subscription.objects.create(user_id=id, subscribed=current_user)
             return Response(serializer.data, status=status.HTTP_200_OK)
-
 
         Subscription.objects.filter(
             subscribed_id=current_user.id,
