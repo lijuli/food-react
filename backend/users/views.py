@@ -25,13 +25,16 @@ class CustomUserViewSet(UserViewSet):
         url_path='subscriptions'
     )
     def get_subscriptions(self, request):
+        current_user = self.request.user
         paginator = DefaultResultsSetPagination()
-        users = User.objects.filter(subscribed__user=self.request.user)
-        result_page = paginator.paginate_queryset(users, request)
-        serializer = SubscribeSerializer(
+        subscriptions = Subscription.objects.filter(subscribed=current_user)
+        result_page = paginator.paginate_queryset(subscriptions, request)
+        serializer = SubscriptionsSerializer(
             result_page,
             many=True,
-            context={'request': request}
+            context={
+                'request': request
+            }
         )
         return paginator.get_paginated_response(serializer.data)
 
@@ -56,6 +59,8 @@ class CustomUserViewSet(UserViewSet):
                 data={
                     'user': user.id,
                     'subscribed': current_user.id
+                    # 'user': current_user.id,
+                    # 'subscribed': user.id
                 },
                 context={'request': request}
             )
