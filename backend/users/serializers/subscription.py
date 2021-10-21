@@ -51,6 +51,7 @@ class RecipeSubscriptionSerializer(serializers.ModelSerializer):
             'cooking_time',
         )
 
+
 class SubscriptionsSerializer(serializers.ModelSerializer):
 
     class Meta:

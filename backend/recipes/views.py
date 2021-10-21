@@ -59,7 +59,9 @@ class RecipeViewSet(ModelViewSet):
     filter_fields = ('tags', 'is_favorited', 'is_in_shopping_cart',)
 
     def get_permissions(self):
-        if self.action in ('create', 'partial_update', 'update', 'destroy'):
+        if self.action in ('create', 'perform_create'):
+            self.permission_classes = [IsAuthenticated]
+        if self.action in ('partial_update', 'update', 'destroy'):
             self.permission_classes = [IsAuthorOrAdmin]
         if self.action in ('list', 'retrieve'):
             self.permission_classes = [AllowAny]
