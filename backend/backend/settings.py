@@ -119,7 +119,6 @@ DJOSER = {
     'PERMISSIONS': {
         'user_list': ['rest_framework.permissions.AllowAny'],
         'user': ['rest_framework.permissions.IsAuthenticated'],
-        'set_password': ['rest_framework.permissions.IsAdminUser']
     },
     'HIDE_USERS': False,
 }
