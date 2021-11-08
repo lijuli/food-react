@@ -1,5 +1,3 @@
-Welcome to the api_yamdb wiki!
-
 ### Usage
 
 Start backend project like this:
