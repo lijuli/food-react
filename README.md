@@ -1,5 +1,8 @@
 ### Usage
 
+This is a project for food recipes. 
+The frontend part was kindly provided by yandex-praktikum.
+
 Start backend project like this:
 
 Create and activate virtual environment: \
