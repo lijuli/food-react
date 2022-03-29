@@ -1,7 +1,7 @@
 ### Usage
 
 This is a project for food recipes. 
-The frontend part was kindly provided by yandex-praktikum.
+The frontend part was kindly provided by other contributors.
 
 Start backend project like this:
 
